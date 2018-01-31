@@ -43,6 +43,7 @@ public class HelloworldVerticle extends AbstractVerticle {
 		router.get("/api/hello/:name").handler(ctx -> {
 			ctx.response().end(hello(ctx.request().getParam("name")));
 		});
+
 		vertx.createHttpServer().requestHandler(router::accept).listen(8080);
 	}
 
