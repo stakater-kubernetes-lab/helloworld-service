@@ -26,6 +26,11 @@ mavenNode(mavenImage: 'maven:3.5-jdk-8') {
 
         stage('Checkout') {
             checkout scm
+
+            // retrieve the URI used for checking out the source
+            // this assumes one branch with one uri
+            git_uri = scm.getRepositories()[0].getURIs()[0].toString()
+            git_branch = scm.getBranches()[0].toString()
         }
 
         stage('Clean & Package') {
@@ -33,18 +38,18 @@ mavenNode(mavenImage: 'maven:3.5-jdk-8') {
         }
 
         stage('Build Docker Image') {
-          sh "docker build -t ${image_name}:${env.JOB_BASE_NAME}.${env.BUILD_ID} ."
+            sh "docker build -t ${image_name}:${env.JOB_BASE_NAME}.${env.BUILD_ID} ."
         }
 
         // only push from master
         stage('Publish Docker Image') {
-          if (git_branch.contains(publish_branch)) {
-            sh "docker login ${registry} -u ${USERNAME} -p ${PASSWORD}"
-            sh "docker tag ${image_name}:${env.JOB_BASE_NAME}.${env.BUILD_ID} ${registry}/${registry_user}/${image_name}:${image_tag}"
-            sh "docker push ${registry}/${registry_user}/${image_name}:${image_tag}"
-          } else {
-            echo "Not pushing to docker repo:\n    BRANCH_NAME='${env.BRANCH_NAME}'\n    GIT_BRANCH='${git_branch}'\n    git_uri='${git_uri}'"
-          }
+            if (git_branch.contains(publish_branch)) {
+                sh "docker login ${registry} -u ${USERNAME} -p ${PASSWORD}"
+                sh "docker tag ${image_name}:${env.JOB_BASE_NAME}.${env.BUILD_ID} ${registry}/${registry_user}/${image_name}:${image_tag}"
+                sh "docker push ${registry}/${registry_user}/${image_name}:${image_tag}"
+            } else {
+                echo "Not pushing to docker repo:\n    BRANCH_NAME='${env.BRANCH_NAME}'\n    GIT_BRANCH='${git_branch}'\n    git_uri='${git_uri}'"
+            }
         }
     }
 }
