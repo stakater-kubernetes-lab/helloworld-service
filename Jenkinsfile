@@ -148,7 +148,7 @@ mavenNode(mavenImage: 'maven:3.5-jdk-8') {
                   fields: [
                       [
                           title: "Branch",
-                          value: "${env.GIT_BRANCH}",
+                          value: "${branchName}",
                           short: true
                       ],
                       [
