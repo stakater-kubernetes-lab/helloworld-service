@@ -27,7 +27,7 @@ def robot_secret    = "quay-robot-zabra-container-rw"
 def image_name      = "zabra-container"
 def image_tag       = "${env.RELEASE_VERSION}" != "null" ? "${env.RELEASE_VERSION}" : "latest"
 
-def slackNotificationChannel = "[CHANNEL_NAME]"
+def slackNotificationChannel = "${env.CHANNEL_NAME}"
 def author = ""
 def message = ""
 def testSummary = ""
@@ -44,7 +44,7 @@ def isResultGoodForPublishing = { ->
 }
 
 def notifySlack(text, channel, attachments) {
-    def slackURL = '[SLACK_WEBHOOK_URL]'
+    def slackURL = "${env.SLACK_WEBHOOK_URL}"
     def jenkinsIcon = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
 
     def payload = JsonOutput.toJson([text: text,
@@ -171,8 +171,47 @@ mavenNode(mavenImage: 'maven:3.5-jdk-8') {
             throw e
         }
 
-        stage('Build Docker Image') {
-            sh "docker build -t ${image_name}:${env.JOB_BASE_NAME}.${env.BUILD_ID} ."
+        try {
+            stage('Build Docker Image') {
+                sh "docker build -t ${image_name}:${env.JOB_BASE_NAME}.${env.BUILD_ID} ."
+            }
+        } catch (hudson.AbortException ae) {
+            // I ignore aborted builds, but you're welcome to notify Slack here
+        } catch (e) {
+            def buildStatus = "Failed"
+
+            if (isPublishingBranch()) {
+              buildStatus = "MasterFailed"
+            }
+
+            notifySlack("", slackNotificationChannel, [
+              [
+                  title: "${env.JOB_NAME}, build #${env.BUILD_NUMBER}",
+                  title_link: "${env.BUILD_URL}",
+                  color: "danger",
+                  author_name: "${author}",
+                  text: "${buildStatus}",
+                  fields: [
+                      [
+                          title: "Branch",
+                          value: "${env.GIT_BRANCH}",
+                          short: true
+                      ],
+                      [
+                          title: "Last Commit",
+                          value: "${message}",
+                          short: false
+                      ],
+                      [
+                          title: "Error",
+                          value: "${e}",
+                          short: false
+                      ]
+                  ]
+              ]
+            ])
+
+            throw e
         }
 
         // only push from master
