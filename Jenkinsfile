@@ -126,6 +126,8 @@ mavenNode(mavenImage: 'maven:3.5-jdk-8') {
         try {
             stage('Clean & Package') {
                 sh 'mvn clean package'
+
+                populateGlobalVariables()
             }
         } catch (hudson.AbortException ae) {
             // I ignore aborted builds, but you're welcome to notify Slack here
@@ -172,12 +174,13 @@ mavenNode(mavenImage: 'maven:3.5-jdk-8') {
         }
 
         try {
+            println "Going to run build docker image stage"
             stage('Build Docker Image') {
                 sh "docker build -t ${image_name}:${env.JOB_BASE_NAME}.${env.BUILD_ID} ."
             }
-        } catch (hudson.AbortException ae) {
-            // I ignore aborted builds, but you're welcome to notify Slack here
         } catch (e) {
+            println "Caught exception in Build Docker Image stage ... "
+
             def buildStatus = "Failed"
 
             if (isPublishingBranch()) {
