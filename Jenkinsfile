@@ -28,7 +28,7 @@ if (! branchName.equalsIgnoreCase("master")){
     canaryVersion = branchName + "-" + canaryVersion
 }
 
-mavenNode(mavenImage: 'openjdk:8') {
+mavenNode(mavenImage: 'maven:3.5-jdk-8') {
     container(name: 'maven') {
 
         stage('Checkout') {
@@ -36,8 +36,7 @@ mavenNode(mavenImage: 'openjdk:8') {
         }
 
         stage('Clean') {
-            sh 'chmod +x mvnw'
-            sh './mvnw clean'
+            sh './mvn clean'
         }
 
         stage('Canary Release') {
