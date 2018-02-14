@@ -21,18 +21,12 @@ def stashName = ""
 //TODO: Should be picked from ENV varaible
 def dockerRegistryURL="docker.tools.stackator.com:443"
 
-def branchName = utils.getBranch()
-// If branch other then master, append branch name to version
-// in order to avoid conflicts in artifact releases
-if (! branchName.equalsIgnoreCase("master")){
-    canaryVersion = branchName + "-" + canaryVersion
-}
-
 mavenNode(mavenImage: 'maven:3.5-jdk-8') {
     container(name: 'maven') {
 
         stage('Checkout') {
             checkout scm
+            git_branch = scm.getBranches()[0].toString()
         }
 
         stage('Clean') {
@@ -40,6 +34,11 @@ mavenNode(mavenImage: 'maven:3.5-jdk-8') {
         }
 
         stage('Canary Release') {
+            // If branch other then master, append branch name to version
+            // in order to avoid conflicts in artifact releases
+            if (! git_branch.equalsIgnoreCase("master")){
+                canaryVersion = git_branch + "-" + canaryVersion
+            }
             mavenCanaryRelease2 {
               version = canaryVersion
             }
