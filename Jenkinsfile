@@ -21,7 +21,7 @@ def stashName = ""
 //TODO: Should be picked from ENV varaible
 def dockerRegistryURL="docker.tools.stackator.com:443"
 
-mavenNode(mavenImage: 'maven:3.5-jdk-8') {
+mavenNode(mavenImage: 'openjdk:8') {
     container(name: 'maven') {
 
         stage('Checkout') {
@@ -30,7 +30,7 @@ mavenNode(mavenImage: 'maven:3.5-jdk-8') {
         }
 
         stage('Clean') {
-            sh 'mvn clean'
+            sh './mvnw clean'
         }
 
         stage('Canary Release') {
@@ -39,7 +39,7 @@ mavenNode(mavenImage: 'maven:3.5-jdk-8') {
             if (! git_branch.equalsIgnoreCase("master")){
                 canaryVersion = git_branch + "-" + canaryVersion
             }
-            mavenCanaryRelease {
+            mavenCanaryRelease2 {
               version = canaryVersion
             }
         }
