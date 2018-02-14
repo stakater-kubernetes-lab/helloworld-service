@@ -30,6 +30,7 @@ mavenNode(mavenImage: 'openjdk:8') {
         }
 
         stage('Clean') {
+            sh 'chmod +x mvnw'
             sh './mvnw clean'
         }
 
