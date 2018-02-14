@@ -35,11 +35,6 @@ mavenNode(mavenImage: 'openjdk:8') {
         }
 
         stage('Canary Release') {
-            // If branch other then master, append branch name to version
-            // in order to avoid conflicts in artifact releases
-            if (! git_branch.equalsIgnoreCase("master")){
-                canaryVersion = git_branch + "-" + canaryVersion
-            }
             mavenCanaryRelease2 {
               version = canaryVersion
             }
