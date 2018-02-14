@@ -51,6 +51,7 @@
 		<!-- other plugin versions -->
 		<version.exec.plugin>1.4.0</version.exec.plugin>
 		<vertx.version>3.2.1</vertx.version>
+   		<failOnMissingWebXml>false</failOnMissingWebXml>   
 
 		<fabric8.maven.plugin.version>3.5.31</fabric8.maven.plugin.version>
 	</properties>
