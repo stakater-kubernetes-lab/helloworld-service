@@ -30,7 +30,7 @@ mavenNode(mavenImage: 'maven:3.5-jdk-8') {
         }
 
         stage('Clean') {
-            sh './mvn clean'
+            sh 'mvn clean'
         }
 
         stage('Canary Release') {
@@ -39,7 +39,7 @@ mavenNode(mavenImage: 'maven:3.5-jdk-8') {
             if (! git_branch.equalsIgnoreCase("master")){
                 canaryVersion = git_branch + "-" + canaryVersion
             }
-            mavenCanaryRelease2 {
+            mavenCanaryRelease {
               version = canaryVersion
             }
         }
