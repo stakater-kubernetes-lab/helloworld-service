@@ -20,7 +20,7 @@
 
 	<groupId>com.redhat.developers.helloworld</groupId>
 	<artifactId>helloworld-service</artifactId>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>hellworld-service</name>
 
