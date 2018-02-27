@@ -9,12 +9,10 @@ try {
 }
 
 def canaryVersion = "${versionPrefix}.${env.BUILD_NUMBER}"
-def utils = new io.fabric8.Utils()
 def label = "buildpod.${env.JOB_NAME}.${env.BUILD_NUMBER}".replace('-', '_').replace('/', '_')
 
-def envDev = 'dev'
-def envStage = 'stage'
-def envProd = 'prod'
+// TODO: Change to 'lab'
+def envLab = 'test2'
 def stashName = ""
 
 // Hardcoded registry url
@@ -41,7 +39,7 @@ mavenNode(mavenImage: 'openjdk:8') {
         }
 
         stage('Rollout to Dev') {
-            kubernetesApply(registry: dockerRegistryURL, environment: envDev)
+            kubernetesApply(registry: dockerRegistryURL, environment: envLab)
             //stash deployments
             stashName = label
             stash includes: '**/*.yml', name: stashName
