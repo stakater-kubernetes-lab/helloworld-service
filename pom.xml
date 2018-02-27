@@ -55,7 +55,7 @@
 
 		<fabric8.maven.plugin.version>3.5.31</fabric8.maven.plugin.version>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>io.vertx</groupId>
@@ -130,7 +130,7 @@
 					<verbose>true</verbose>
 					<resources>
 						<env>
-							<JAVA_APP_JAR>${project.build.directory}/${project.artifactId}-fat.jar</JAVA_APP_JAR >
+							<JAVA_APP_JAR>/deployments/${project.artifactId}-fat.jar</JAVA_APP_JAR >
 						</env>
 					</resources>
 				</configuration>
