@@ -77,7 +77,7 @@
 	<build>
 		<finalName>helloworld-service</finalName>
 		<plugins>
-			<plugin>
+			<!-- <plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>${version.exec.plugin}</version>
@@ -90,8 +90,8 @@
 						<argument>config.json</argument>
 					</arguments>
 				</configuration>
-			</plugin>
-			<plugin>
+			</plugin> -->
+			<!-- <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>2.4.3</version>
@@ -115,7 +115,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin> -->
 
 			<!-- 	The fabric8-maven-plugin enables the automatic generation of a Docker image and Kubernetes /
 			OpenShift descriptors including this Spring application. -->
