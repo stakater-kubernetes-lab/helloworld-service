@@ -20,7 +20,7 @@
 
 	<groupId>com.redhat.developers.helloworld</groupId>
 	<artifactId>helloworld-service</artifactId>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>hellworld-service</name>
 
@@ -55,7 +55,7 @@
 
 		<fabric8.maven.plugin.version>3.5.31</fabric8.maven.plugin.version>
 	</properties>
-
+	
 	<dependencies>
 		<dependency>
 			<groupId>io.vertx</groupId>
@@ -91,7 +91,7 @@
 					</arguments>
 				</configuration>
 			</plugin>
-			<!-- <plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>2.4.3</version>
@@ -115,7 +115,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin> -->
+			</plugin>
 
 			<!-- 	The fabric8-maven-plugin enables the automatic generation of a Docker image and Kubernetes /
 			OpenShift descriptors including this Spring application. -->
@@ -130,7 +130,7 @@
 					<verbose>true</verbose>
 					<resources>
 						<env>
-							<JAVA_APP_JAR>${project.build.finalName}.war</JAVA_APP_JAR >
+							<JAVA_APP_JAR>${project.build.directory}/${project.artifactId}-fat.jar</JAVA_APP_JAR >
 						</env>
 					</resources>
 				</configuration>
