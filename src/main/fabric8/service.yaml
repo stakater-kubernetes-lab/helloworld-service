@@ -1,5 +1,0 @@
-metadata:
-  annotations:
-    fabric8.io/ingress.annotations: |-
-      kubernetes.io/ingress.class: internal-ingress
-      ingress.kubernetes.io/force-ssl-redirect: false
